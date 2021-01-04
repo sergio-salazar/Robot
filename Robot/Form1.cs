@@ -1202,7 +1202,7 @@ namespace Robot
         }
         #endregion
 
-        #region HERUISTICA
+        #region HEURISTICA
         private void btnHeuristica_Click(object sender, EventArgs e)
         {
             //NOS MANDA HACIA LA SECCIÓN DE ALGORITMOS CON HEURISTICA
@@ -1215,11 +1215,13 @@ namespace Robot
             g = e.Graphics;
             e.Graphics.TranslateTransform(pbHeuristica.Width / 2, pbHeuristica.Height / 2);
 
+            //DIBUJA EL ROBOT
             Pen pen = new Pen(Color.Blue, 3);
             g.DrawLines(pen, robot);
             Brush brushBlue = new SolidBrush(Color.Blue);
             g.FillPolygon(brushBlue, robot);
 
+            //DIBUJA LOS MUROS DEL LABERINTO
             Pen penBlack = new Pen(Color.Black, 3);
             g.DrawLines(penBlack, muro1);
             Brush brushBlack = new SolidBrush(Color.Black);
@@ -1255,6 +1257,7 @@ namespace Robot
             g.DrawLines(penBlack, muro11);
             g.FillPolygon(brushBlack, muro11);
 
+            //DIBUJA EL OBJETIVO
             Pen penRed = new Pen(Color.Red, 3);
             g.DrawLines(penRed, objetivoRobot);
             Brush brushRed = new SolidBrush(Color.Red);
@@ -1263,11 +1266,13 @@ namespace Robot
 
         private double DistanciaPuntos(double x, double y)
         {
+            //DEVUELVE LA DISTANCIA ENTRE EL OBJETIVO Y LAS COORDENADAS QUE LLEGAN COMO PARÁMETRO
             return Math.Sqrt(Math.Pow((objetivoRobot[0].X - x), 2) + Math.Pow((objetivoRobot[0].Y - y), 2));
         }
 
         private bool ChoqueMuro(double x, double y)
         {
+            //CHECA SI EL OBJETIVO CHECA CON UN MURO
             bool choque = false;
             if ((x == muro1[0].X && y == muro1[0].Y) || (x == muro2[0].X && y == muro2[0].Y) || (x == muro3[0].X && y == muro3[0].Y) || (x == muro4[0].X && y == muro4[0].Y)
                 || (x == muro5[0].X && y == muro5[0].Y) || (x == muro6[0].X && y == muro6[0].Y) || (x == muro7[0].X && y == muro7[0].Y) || (x == muro8[0].X && y == muro8[0].Y)
@@ -1280,6 +1285,12 @@ namespace Robot
 
         private void btnIniciarHeuristica_Click(object sender, EventArgs e)
         {
+            //SI NO HA LLEGADO EL ROBOT AL OBJETIVO, ENTONCES TENDRÁ TRES
+            //POSIBILIDADES DE MOVIMIENTO, HACIA LA DERECHA, ARRIBA Y ABAJO
+            //CHECA HACIA CADA POSIBILIDAD, PRIMERAMENTE SI NO CHOCA CON ALGÚN
+            //MURO, EN CASO DE QUE NO, ENTONCES SE CHECA CUAL ES LA DISTANCIA
+            //MÁS CORTA PARA LLEGAR AL OBJETIVO, Y HACE EL MOVIMIENTO HACIA
+            //ESA COORDENADA, TODO ESTO HASTA CHOCAR CON EL OBJETIVO FINAL
             while (!llegoObjetivo)
             {
                 //POSIBILIDAD 1
@@ -1396,6 +1407,7 @@ namespace Robot
 
         private void btnRegresarHeuristica_Click(object sender, EventArgs e)
         {
+            //NOS REGRESA AL MENÚ PRINCIPAL Y REGRESA TODO A COMO EMPEZÓ
             tabRobot.SelectedIndex = tabRobot.TabPages.IndexOf(tabRobot.TabPages["pagePrincipal"]);
             lblRobot.Text = "Seleccione una opción";
             llegoObjetivo = false;
@@ -1405,6 +1417,7 @@ namespace Robot
 
         private void LimpiarHeuristica()
         {
+            //REUBICA AL ROBOT A DONDE HABÍA EMPEZADO
             robot[0] = new PointF(-390, 0);
             robot[1] = new PointF(-340, 0);
             robot[2] = new PointF(-340, 50);
@@ -1418,6 +1431,8 @@ namespace Robot
             #region ALEATORIO
             if (tabRobot.SelectedTab == tabRobot.TabPages["pageAleatorio"])
             {
+                //REUBICA ALEATORIAMENTE A LOS OBJETIVOS DEL ALGORITMO CON
+                //MOVIMIENTOS ALEATORIOS
                 Random r = new Random();
                 Traslacion(objetivo1, r.Next(-340, 340), r.Next(-140, 140));
                 Traslacion(objetivo2, r.Next(-340, 340), r.Next(-140, 140));
@@ -1435,6 +1450,8 @@ namespace Robot
             #region A*
             if (tabRobot.SelectedTab == tabRobot.TabPages["pageAlgoritmoA"])
             {
+                //REUBICA ALEATORIAMENTE CADA UNO DE LOS OBJETIVOS
+                //DEL ALGORITMO A*
                 Random r = new Random();
                 int x1 = r.Next(-5, 5) * 50;
                 int y1 = r.Next(-3, 3) * 50;
@@ -1472,6 +1489,8 @@ namespace Robot
             #region HEURISTICA
             if (tabRobot.SelectedTab == tabRobot.TabPages["pageHeuristica"])
             {
+                //REUBICA ALEATORIAMENTE AL OBJETIVO FINAL
+                //DEL ALGORITMO CON HEURISTICA
                 Random r = new Random();
                 int x = r.Next(-4, 4) * 50;
                 int y = r.Next(-2, 2) * 50;
